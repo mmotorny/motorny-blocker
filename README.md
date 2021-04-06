@@ -1,2 +1,2 @@
 # motorny-blocker
-Block yourself from visiting distracting sites.
+Block yourself from visiting distracting websites.

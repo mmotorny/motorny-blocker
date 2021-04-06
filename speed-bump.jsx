@@ -8,29 +8,41 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 function WebsiteBlockedDialog(props) {
-  const handleClose = () => {
-    window.close();
+  const handleUnblock = () => {
+    chrome.storage.local.get(null, (localStorage) => {
+      console.log(`Unblocking ${props.blockedUrl.hostname}.`);
+      const blockedHostnames = localStorage['blockedHostnames'] ??= {};
+      delete blockedHostnames[props.blockedUrl.hostname];
+      chrome.storage.local.set(localStorage);
+      window.location = props.blockedUrl;  
+    });
   };
 
-  const handleUnblock = () => {
-    //window.location = props.blockedUrl;
-    console.log(`chrome.runtime = ${chrome.runtime}`);
+  const handleUnblockOnce = () => {
+    chrome.storage.local.get(null, (localStorage) => {
+      console.log(`Unblocking ${props.blockedUrl.hostname} once.`);
+      const blockedHostnames = localStorage['blockedHostnames'] ??= {};
+      const blockedHostname = blockedHostnames[props.blockedUrl.hostname] ??= {};
+      blockedHostname['unblockedUntil'] = Date.now() + 60 * 1000;
+      chrome.storage.local.set(localStorage);
+      window.location = props.blockedUrl;  
+    });
   };
 
   return (
-    <Dialog open={true} onClose={handleClose}>
+    <Dialog open={true}>
       <DialogTitle>Website blocked</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          {`${new URL(props.blockedUrl).hostname} is blocked by your request.`}
+          {`${props.blockedUrl.hostname} is blocked by your request.`}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="secondary">
-          Cancel
+        <Button onClick={handleUnblock} color="secondary">
+          Unblock
         </Button>
-        <Button onClick={handleUnblock} color="primary">
-          Unblock for 15 minutes
+        <Button onClick={handleUnblockOnce} color="primary">
+          Unblock once
         </Button>
       </DialogActions>
     </Dialog>
@@ -39,6 +51,6 @@ function WebsiteBlockedDialog(props) {
 
 const urlParams = new URLSearchParams(window.location.search);
 ReactDOM.render(
-  <WebsiteBlockedDialog blockedUrl={urlParams.get('blocked-url')} />,
+  <WebsiteBlockedDialog blockedUrl={new URL(urlParams.get('blocked-url'))} />,
   document.querySelector('#react-dom-container')
 );
