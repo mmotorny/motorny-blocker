@@ -1,13 +1,11 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 
-const dist = path.resolve(__dirname, 'dist');
-
 module.exports = {
   mode: 'production',
   entry: {
-    'background': './background.js',
-    'speed-bump': './speed-bump.jsx',
+    'background': './src/background.js',
+    'speed-bump': './src/speed-bump.jsx',
   },
   module: {
     rules: [
@@ -25,22 +23,20 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: './icon-*.png',
-          to: dist,
+          context: 'src',
+          from: 'icon-*.png',
         },
         {
-          from: './manifest.json',
-          to: dist,
+          from: 'src/manifest.json',
         },
         {
-          from: './speed-bump.html',
-          to: dist,
+          from: 'src/speed-bump.html',
         },
       ],
     }),
   ],
   output: {
-    path: dist,
+    path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
     clean: true,
   },
