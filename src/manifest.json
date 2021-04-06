@@ -18,9 +18,5 @@
   "permissions": [
     "storage",
     "tabs"
-  ],
-  "host_permissions": [
-    "http://*/",
-    "https://*/"
   ]
 }
