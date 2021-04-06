@@ -9,7 +9,7 @@ chrome.action.onClicked.addListener((tab) => {
       chrome.tabs.update(tab.id, {
         url: `chrome-extension://${
           chrome.runtime.id
-        }/speed-bump.html?blocked-url=${encodeURI(url)}`,
+        }/website-blocked.html?blocked-url=${encodeURI(url)}`,
       });
     });
   });
@@ -47,7 +47,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
     chrome.tabs.update(tabId, {
       url: `chrome-extension://${
         chrome.runtime.id
-      }/speed-bump.html?blocked-url=${encodeURI(url)}`,
+      }/website-blocked.html?blocked-url=${encodeURI(url)}`,
     });
   });
 });

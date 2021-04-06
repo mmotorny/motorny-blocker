@@ -5,7 +5,7 @@ module.exports = {
   mode: 'production',
   entry: {
     'background': './src/background.js',
-    'speed-bump': './src/speed-bump.jsx',
+    'website-blocked': './src/website-blocked.jsx',
   },
   module: {
     rules: [
@@ -30,7 +30,7 @@ module.exports = {
           from: 'src/manifest.json',
         },
         {
-          from: 'src/speed-bump.html',
+          from: 'src/website-blocked.html',
         },
       ],
     }),
